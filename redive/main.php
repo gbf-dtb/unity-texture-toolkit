@@ -476,8 +476,8 @@ if ($manifest[0] !== 'a/masterdata_master_0003.cdb') {
   checkAndUpdateResource($TruthVersion);
   return;
 }
-$bundleHash = $manifest[1];
-$bundleSize = $manifest[3]|0;
+$bundleHash = $manifest[2];
+$bundleSize = $manifest[4]|0;
 if ($last_version['hash'] == $bundleHash) {
   _log("Same hash as last version ${bundleHash}");
   file_put_contents('last_version', json_encode($last_version));
@@ -497,7 +497,7 @@ curl_setopt_array($curl, array(
 $bundle = curl_exec($curl);
 //curl_close($curl);
 $downloadedSize = strlen($bundle);
-$downloadedHash = md5($bundle);
+$downloadedHash = hash('xxh64', $bundle); //xxHash requires PHP 8.1 and above
 if ($downloadedSize != $bundleSize || $downloadedHash != $bundleHash) {
   _log("download failed, received hash: ${downloadedHash}, received size: ${downloadedSize}");
   return;
