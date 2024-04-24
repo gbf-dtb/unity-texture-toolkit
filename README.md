@@ -1,3 +1,21 @@
+Fork of esterTion's [Unity Texture Toolkit](https://github.com/esterTion/unity-texture-toolkit).
+
+The only thing I changed was the main.php for the Re:Dive tools.  
+Cygames changed the manifest format in 2024 April (along with the Unity update) and added one new column, from this:
+
+    bundle filename, bundle md5 hash, bundle type, bundle size  
+...to this:
+
+    bundle filename, bundle md5 hash, bundle xxHash64 hash, bundle type, bundle size
+
+And since they're shifted by one column, +1 to the manifest array to get `bundleHash` and `bundleSize`.
+
+On top of that, the URL now uses XXH64 hash (64-bit, 16 chars) instead of MD5 hash (128-bit, 32 chars), so instead of using `md5($bundle)` to check for hash, `hash("xxh64", $bundle)` is used instead.
+
+*※take note that support for xxHash was added only in [PHP 8.1](https://www.php.net/manual/en/migration81.new-features.php#xxHash) so if you're using an older version, it'll not work.*
+
+---
+
 # Unity Texture Toolkit
 
 > written in PHP
